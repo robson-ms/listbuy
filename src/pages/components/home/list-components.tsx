@@ -1,6 +1,5 @@
 import Button from '@/components/Button'
 import { H2, Span } from '@/components/text'
-import { useLists } from '@/hooks/lists'
 import dayjs from 'dayjs'
 import { ListTypes } from 'lib/db'
 import { useRouter } from 'next/router'
@@ -8,17 +7,17 @@ import { setCookie } from 'nookies'
 
 interface TypesList {
   list: ListTypes
+  handleDelete: any
 }
 
-export default function ListComponent({ list }: TypesList) {
-  const { deleteLists } = useLists()
+export default function ListComponent({ list, handleDelete }: TypesList) {
   const router = useRouter()
-  function handleDelete(id: number) {
-    deleteLists(id)
+  function handleDeleteConfirme(id: number) {
+    handleDelete(id)
   }
 
-  function handleBuy(data: number) {
-    const id = data.toString()
+  function handleBuy(listId: number) {
+    const id = listId.toString()
     router.push(`/list/${id}`)
     setCookie(null, 'LIST_ID', id, {
       maxAge: 60 * 60,
@@ -43,7 +42,7 @@ export default function ListComponent({ list }: TypesList) {
             label="Deletar"
             color="danger"
             variant="text"
-            onClick={() => handleDelete(list.id)}
+            onClick={() => handleDeleteConfirme(list.id)}
           />
         </div>
       </div>

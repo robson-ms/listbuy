@@ -8,7 +8,7 @@ type HeaderTypes = {
 
 export default function Header(props: HeaderTypes) {
   return (
-    <div className="max-w-screen-md w-full h-16 flex bg-primary px-6 py-2 items-center justify-between drop-shadow-md">
+    <div className="max-w-screen-md w-full h-16 flex bg-primary px-4 py-2 items-center justify-between drop-shadow-md">
       <H1 label="Lista" color="white" />
 
       <button

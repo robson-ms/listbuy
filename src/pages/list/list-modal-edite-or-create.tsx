@@ -3,20 +3,36 @@ import Input from '@/components/Input'
 import Modal from '@/components/Modal'
 import { H2 } from '@/components/text'
 import { useItem } from '@/hooks/items'
-import { useState } from 'react'
+import { useLists } from '@/hooks/lists'
+import { useEffect, useState } from 'react'
 
 interface AddItemModalTypes {
   isVisible: boolean
   setIsVisible: any
   listId: number
+  type: string
 }
 
-export default function AddItemModal({ isVisible, setIsVisible, listId }: AddItemModalTypes) {
+export default function ModalEditeOrCreate(props: AddItemModalTypes) {
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
   const [price, setPrice] = useState('')
   const [totalValue, setTotalValue] = useState('')
-  const { postItem, loading, success } = useItem()
+  const { featchItem, item, success, postItem, itemId } = useItem()
+  const { featchListItems } = useLists()
+
+  useEffect(() => {
+    if (itemId) {
+      featchItem(itemId)
+    }
+
+    if (item) {
+      setTitle(item.title)
+      setAmount(item.amount?.toString())
+      setPrice(item.price)
+      setTotalValue(item.valueTotal)
+    }
+  }, [])
 
   async function handleSubmit(e: any) {
     e.preventDefault()
@@ -25,7 +41,7 @@ export default function AddItemModal({ isVisible, setIsVisible, listId }: AddIte
       amount,
       price,
       totalValue,
-      listId,
+      listId: props.listId,
     }
     await postItem(data)
     clearInputs()
@@ -40,7 +56,7 @@ export default function AddItemModal({ isVisible, setIsVisible, listId }: AddIte
     }
   }
   return (
-    <Modal isVisible={isVisible}>
+    <Modal>
       <div>
         <div className="flex w-full justify-center items-center">
           <H2 label="Add New Items" color="black" />
@@ -66,7 +82,12 @@ export default function AddItemModal({ isVisible, setIsVisible, listId }: AddIte
             </div>
           </div>
           <div className="flex justify-between w-full gap-2 mt-4">
-            <Button typeBtn="button" color="danger" label="Cancelar" onClick={() => setIsVisible(!isVisible)} />
+            <Button
+              typeBtn="button"
+              color="danger"
+              label="Cancelar"
+              onClick={() => props.setIsVisible(!props.isVisible)}
+            />
             <Button typeBtn="submit" color="success" label="Criar" />
           </div>
         </form>

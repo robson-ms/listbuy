@@ -5,8 +5,8 @@ import Button from '@/components/Button'
 import { useLists } from '@/hooks/lists'
 
 type ModalTypes = {
-  isVisible: boolean
-  setIsVisible: any
+  isVisibleModalCreate: boolean
+  setIsVisibleModalCreate: any
 }
 
 export default function ListModal(props: ModalTypes) {
@@ -17,16 +17,16 @@ export default function ListModal(props: ModalTypes) {
     postLists(valueInput)
 
     // colocar validação de erro para fechar ou não
-    props.setIsVisible(false)
+    props.setIsVisibleModalCreate(false)
   }
 
   function handleCancel() {
     setValueInput('')
-    props.setIsVisible(false)
+    props.setIsVisibleModalCreate(false)
   }
 
   return (
-    <Modal isVisible={props.isVisible}>
+    <Modal>
       {loadingHome ? (
         <span>Carregando...</span>
       ) : (

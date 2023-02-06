@@ -1,17 +1,29 @@
 import { PencilSimple, ShoppingCartSimple } from 'phosphor-react'
-import { ItemTypes } from '@/hooks/lists/types'
+import { ItemTypes } from '@/hooks/items/types'
 import { useLists } from '@/hooks/lists'
+import { useItem } from '@/hooks/items'
 
 interface TableTypes {
   item: ItemTypes[] | []
+  handleEdit: any
+  isVisible: boolean
+  setIsVisible: any
+  setTypeEditeOrCreate: any
 }
 
-export default function Table({ item }: TableTypes) {
+export default function Table(props: TableTypes) {
   const { loading } = useLists()
+  const { setItemId } = useItem()
+
+  function handleEditeItem(id: number) {
+    setItemId(id)
+    props.setIsVisible(!props.isVisible)
+    props.setTypeEditeOrCreate('edite')
+  }
 
   return (
     <div className="w-full ">
-      {!loading && item?.length === 0 ? (
+      {!loading && props.item?.length === 0 ? (
         <span>Não itens cadastrados</span>
       ) : (
         <table className="flex flex-col w-full justify-between bg-white ">
@@ -21,7 +33,7 @@ export default function Table({ item }: TableTypes) {
               <th className="w-1/5 min-w-max">Ações</th>
             </tr>
           </thead>
-          {item?.map(item => (
+          {props.item?.map(item => (
             <tbody>
               <tr className="flex justify-between px-4 py-2 border border-default">
                 <td>
@@ -43,7 +55,7 @@ export default function Table({ item }: TableTypes) {
                   <button
                     type="button"
                     className="flex w-8 h-8 justify-center items-center bg-orange-500 rounded-full"
-                    onClick={() => console.log('onClick')}
+                    onClick={() => handleEditeItem(item.id)}
                   >
                     <PencilSimple size={20} color="#fff" />
                   </button>

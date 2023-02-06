@@ -5,14 +5,18 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ListComponent from './components/home/list-components'
-import ListModal from './components/home/list-modal'
+import ListModalCreate from './components/home/list-modal-create'
+import ListModalDeleteConfirme from './components/home/list-modal-delete-confirme'
 
 interface TypesList {
   lists: ListTypes[]
 }
 
 export default function Home({ lists }: TypesList) {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisibleModalCreate, setIsVisibleModalCreate] = useState(false)
+  const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
+  const [listId, setListId] = useState(0)
+  const [listName, setListName] = useState('')
   const { loadingHome } = useLists()
 
   const router = useRouter()
@@ -26,7 +30,13 @@ export default function Home({ lists }: TypesList) {
   }, [loadingHome])
 
   function handleOpenModal() {
-    setIsVisible(!isVisible)
+    setIsVisibleModalCreate(!isVisibleModalCreate)
+  }
+
+  function handleDelete(list: ListTypes) {
+    setIsVisibleModalDelete(!isVisibleModalDelete)
+    setListId(list.id)
+    setListName(list.title)
   }
 
   return (
@@ -38,20 +48,33 @@ export default function Home({ lists }: TypesList) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="flex w-screen h-screen flex-col justify-center items-center bg-neutral-800">
+        <div className="flex w-screen h-screen flex-col justify-center items-center bg-neutral-100">
           <Header handleOpenModal={handleOpenModal} />
 
-          <div className="w-full h-full py-2 max-w-screen-md bg-default overflow-auto">
+          <div className="w-full h-full py-2 max-w-screen-md bg-default overflow-auto drop-shadow-lg">
             {loadingHome ? (
               <div className="flex w-full h-full justify-center items-center">
                 <span>Carregando ...</span>
               </div>
             ) : (
-              lists.map(list => <ListComponent list={list} key={list.id} />)
+              lists.map(list => <ListComponent list={list} key={list.id} handleDelete={() => handleDelete(list)} />)
             )}
           </div>
+          {isVisibleModalCreate && (
+            <ListModalCreate
+              isVisibleModalCreate={isVisibleModalDelete}
+              setIsVisibleModalCreate={setIsVisibleModalCreate}
+            />
+          )}
 
-          <ListModal isVisible={isVisible} setIsVisible={setIsVisible} />
+          {isVisibleModalDelete && (
+            <ListModalDeleteConfirme
+              isVisible={isVisibleModalDelete}
+              setIsVisible={setIsVisibleModalDelete}
+              listId={listId}
+              listName={listName}
+            />
+          )}
         </div>
       </main>
     </>
