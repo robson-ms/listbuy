@@ -8,20 +8,30 @@ export interface ItemContextData {
   success: boolean
   itemId: number | undefined
   setItemId: any
+  setItem: any
   postItem(data: ItemPostTypes): Promise<void>
+  updateItem(data: ItemPostTypes): Promise<void>
   deleteItem(id: number): Promise<void>
-  featchItem(id: number): Promise<void>
 }
 
 interface ItemProviderTypes {
   children: ReactNode
 }
 
-interface ItemPostTypes {
+export interface ItemPostTypes {
   title: string
   amount: string
   price: string
-  totalValue: string
+  valueTotal: string
+  listId: number
+}
+
+export interface ItemUpdateTypes {
+  itemId: number
+  title: string
+  amount: string
+  price: string
+  valueTotal: string
   listId: number
 }
 
@@ -33,15 +43,16 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
   const [itemId, setItemId] = useState<number | undefined>()
   const [item, setItem] = useState<ItemTypes>({} as ItemTypes)
 
-  const featchItem = useCallback(async (id: number) => {
+  const postItem = useCallback(async (data: ItemPostTypes) => {
     try {
       setLoading(true)
-      const res = await api.get('/api/items', {
-        params: {
-          id,
-        },
+      const res = await api.post('/api/items', {
+        title: data.title.toString(),
+        price: data.price.toString(),
+        amount: Number(data.amount),
+        valueTotal: Number(data.valueTotal),
+        listId: Number(data.listId),
       })
-      setItem(res.data)
       if (res.status < 300) {
         setSuccess(true)
       }
@@ -52,20 +63,19 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
     }
   }, [])
 
-  const postItem = useCallback(async (data: ItemPostTypes) => {
+  const updateItem = useCallback(async (data: ItemUpdateTypes) => {
     try {
       setLoading(true)
-      const res = await api.post('/api/items', {
+      const res = await api.patch(`/api/items?id=${data.itemId}`, {
         title: data.title.toString(),
         price: data.price.toString(),
         amount: Number(data.amount),
-        valueTotal: Number(data.totalValue),
+        valueTotal: Number(data.valueTotal),
         listId: Number(data.listId),
       })
       if (res.status < 300) {
         setSuccess(true)
       }
-      console.log('RES', res)
     } catch (err) {
       console.log(err)
     } finally {
@@ -76,7 +86,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
   const deleteItem = useCallback(async (id: number) => {
     try {
       setLoading(true)
-      await api.delete(`/api/lists`, {
+      await api.delete(`/api/items`, {
         params: {
           id,
         },
@@ -94,11 +104,12 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         itemId,
         setItemId,
         item,
+        setItem,
         success,
         loading,
         postItem,
         deleteItem,
-        featchItem,
+        updateItem,
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 import { H1 } from '@/components/text'
-import Table from '../components/list/table'
+import Table from './table'
 import { useRouter } from 'next/router'
 import { useLists } from '@/hooks/lists'
 import { useEffect, useState } from 'react'

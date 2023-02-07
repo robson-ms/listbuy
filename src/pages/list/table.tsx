@@ -13,10 +13,11 @@ interface TableTypes {
 
 export default function Table(props: TableTypes) {
   const { loading } = useLists()
-  const { setItemId } = useItem()
+  const { setItemId, setItem } = useItem()
 
-  function handleEditeItem(id: number) {
-    setItemId(id)
+  function handleEditeItem(item: ItemTypes) {
+    setItem(item)
+    setItemId(item.id)
     props.setIsVisible(!props.isVisible)
     props.setTypeEditeOrCreate('edite')
   }
@@ -55,7 +56,7 @@ export default function Table(props: TableTypes) {
                   <button
                     type="button"
                     className="flex w-8 h-8 justify-center items-center bg-orange-500 rounded-full"
-                    onClick={() => handleEditeItem(item.id)}
+                    onClick={() => handleEditeItem(item)}
                   >
                     <PencilSimple size={20} color="#fff" />
                   </button>
