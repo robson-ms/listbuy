@@ -3,14 +3,16 @@ import { useLists } from '@/hooks/lists'
 import { useEffect, useState } from 'react'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
-import Loading from '@/components/Loading'
 import ModalEditeOrCreate from './list-modal-edite-or-create'
 import Table from './table'
 import Layout from '@/components/layout'
 import Header from './header'
+import { useItem } from '@/hooks/items'
+import { Loading } from '@/components/loading'
 
 export default function List(props: any) {
-  const { featchListItems, listItems, loading, closeModal } = useLists()
+  const { featchListItems, listItems, loading } = useLists()
+  const { setCloseModalItem, setItem } = useItem()
   const [isVisible, setIsVisible] = useState(false)
   const [typeEditeOrCreate, setTypeEditeOrCreate] = useState('')
 
@@ -22,21 +24,23 @@ export default function List(props: any) {
   }, [])
 
   function handleBack() {
-    router.push('/')
+    router.back()
   }
 
   function handleCreateNewItem() {
+    setItem({})
+    setCloseModalItem(false)
     setIsVisible(!isVisible)
     setTypeEditeOrCreate('create')
   }
 
   return (
     <Layout>
-      <Header handleCreateNewItem={handleCreateNewItem} title={listItems?.title} handleBack={handleBack} />
+      <Header handleCreateNewItem={handleCreateNewItem} handleBack={handleBack} />
 
       <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg">
         {loading ? (
-          <Loading text="Carregando..." />
+          <Loading />
         ) : (
           <Table
             item={listItems?.Item}

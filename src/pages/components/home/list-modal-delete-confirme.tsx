@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useEffect } from 'react'
 import Modal from '@/components/Modal'
 import Button from '@/components/button'
 import { useLists } from '@/hooks/lists'
@@ -13,6 +13,12 @@ type ModalDeleteTypes = {
 
 export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
   const { deleteLists, closeModal } = useLists()
+
+  useEffect(() => {
+    if (closeModal) {
+      props.setIsVisible(!props.isVisible)
+    }
+  }, [closeModal])
 
   async function handleDelete() {
     await deleteLists(props.listId)

@@ -24,6 +24,11 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
       maxAge: 60 * 60 * 24, // 24 horas
       path: '/',
     })
+
+    setCookie(null, 'LIST_NAME', list.title, {
+      maxAge: 60 * 60 * 24, // 24 horas
+      path: '/',
+    })
   }
 
   const createdAt = dayjs(list.createdAt).format('DD/MM/YYYY')

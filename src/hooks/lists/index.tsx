@@ -8,7 +8,7 @@ export interface ListsContextData {
   listItems: ListTypes
   error: any
   loading: boolean
-  closeModal: boolean
+  closeModal: boolean | undefined
   postLists(title: string): Promise<void>
   deleteLists(id: number): Promise<void>
   featchListItems(id: number): Promise<void>
@@ -24,7 +24,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   const [listItems, setListItems] = useState<ListTypes>({} as ListTypes)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
-  const [closeModal, setCloseModal] = useState(false)
+  const [closeModal, setCloseModal] = useState<boolean | undefined>()
 
   const router = useRouter()
 
@@ -50,6 +50,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   }, [])
 
   const postLists = useCallback(async (title: string) => {
+    setCloseModal(false)
     const load = toast.loading('Carregando...')
     try {
       const res = await api.post('/api/lists', {
@@ -68,6 +69,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   }, [])
 
   const deleteLists = useCallback(async (id: number) => {
+    setCloseModal(false)
     const load = toast.loading('Carregando...')
     try {
       const res = await api.delete(`/api/lists`, {

@@ -1,15 +1,16 @@
 import { HeaderComponent } from '@/components/header'
 import { H1 } from '@/components/text'
 import { ArrowLeft, Plus } from 'phosphor-react'
-import React from 'react'
+import { parseCookies } from 'nookies'
 
 type HeaderTypes = {
   handleBack?: any
-  title: string
   handleCreateNewItem: any
 }
 
 export default function Header(props: HeaderTypes) {
+  const cookie = parseCookies()
+
   return (
     <HeaderComponent>
       <div className="flex w-full items-center">
@@ -17,7 +18,7 @@ export default function Header(props: HeaderTypes) {
           <ArrowLeft size={25} color="#fff" onClick={() => props.handleBack()} />
         </div>
         <div className="flex flex-col w-full justify-center items-center mr-5">
-          <H1 label={`${props?.title ? props?.title : ''}`} color="white" />
+          <H1 label={`${cookie.LIST_NAME ? cookie.LIST_NAME : ''}`} color="white" />
           <div className="font-normal text-sm text-white">
             <span> {`$265 Produtos | Total R$987,58`} </span>
           </div>

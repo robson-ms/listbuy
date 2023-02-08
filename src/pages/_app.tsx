@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AppProvider>
       <Component {...pageProps} />
-      <ToastContainer />
+      <ToastContainer position="top-right" closeOnClick theme="light" />
     </AppProvider>
   )
 }
