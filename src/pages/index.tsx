@@ -1,9 +1,9 @@
-import Header from '@/components/Header'
+import { useState } from 'react'
+import Header from './components/home/header'
+import Layout from '@/components/layout'
 import { useLists } from '@/hooks/lists'
 import { getAllLists, ListTypes } from 'lib/db'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import ListComponent from './components/home/list-components'
 import ListModalCreate from './components/home/list-modal-create'
 import ListModalDeleteConfirme from './components/home/list-modal-delete-confirme'
@@ -17,17 +17,7 @@ export default function Home({ lists }: TypesList) {
   const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
   const [listId, setListId] = useState(0)
   const [listName, setListName] = useState('')
-  const { loadingHome } = useLists()
-
-  const router = useRouter()
-
-  const refreshData = () => {
-    router.replace(router.asPath)
-  }
-
-  useEffect(() => {
-    refreshData()
-  }, [loadingHome])
+  const { loading } = useLists()
 
   function handleOpenModal() {
     setIsVisibleModalCreate(!isVisibleModalCreate)
@@ -48,11 +38,11 @@ export default function Home({ lists }: TypesList) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="flex w-screen h-screen flex-col justify-center items-center bg-neutral-100">
+        <Layout>
           <Header handleOpenModal={handleOpenModal} />
 
-          <div className="w-full h-full py-2 max-w-screen-md bg-default overflow-auto drop-shadow-lg">
-            {loadingHome ? (
+          <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg">
+            {loading ? (
               <div className="flex w-full h-full justify-center items-center">
                 <span>Carregando ...</span>
               </div>
@@ -75,7 +65,7 @@ export default function Home({ lists }: TypesList) {
               listName={listName}
             />
           )}
-        </div>
+        </Layout>
       </main>
     </>
   )

@@ -1,4 +1,4 @@
-import Button from '@/components/Button'
+import Button from '@/components/button'
 import { H2, Span } from '@/components/text'
 import dayjs from 'dayjs'
 import { ListTypes } from 'lib/db'
@@ -19,8 +19,9 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
   function handleBuy(listId: number) {
     const id = listId.toString()
     router.push(`/list/${id}`)
+
     setCookie(null, 'LIST_ID', id, {
-      maxAge: 60 * 60,
+      maxAge: 60 * 60 * 24, // 24 horas
       path: '/',
     })
   }
@@ -31,7 +32,9 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
     <div className="w-full flex justify-center items-center overflow-auto">
       <div className="flex w-full px-4 py-4 justify-between items-center bg-white mb-1 ">
         <div>
-          <H2 color="black" label={list.title} className="-mb-1" />
+          <div className="-mb-5">
+            <H2 color="black" label={list.title} />
+          </div>
           <Span color="black" label={`Criado: ${createdAt}`} />
         </div>
 

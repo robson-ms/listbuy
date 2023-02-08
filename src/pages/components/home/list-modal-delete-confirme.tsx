@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react'
 import Modal from '@/components/Modal'
-import Button from '@/components/Button'
+import Button from '@/components/button'
 import { useLists } from '@/hooks/lists'
 import { H2, Span } from '@/components/text'
 
@@ -12,11 +12,14 @@ type ModalDeleteTypes = {
 }
 
 export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
-  const { loadingHome, deleteLists } = useLists()
+  const { deleteLists, closeModal } = useLists()
 
-  function handleDelete() {
-    console.log('LISTID', props.listId)
-    deleteLists(props.listId)
+  async function handleDelete() {
+    await deleteLists(props.listId)
+
+    if (closeModal) {
+      props.setIsVisible(false)
+    }
   }
 
   function handleCancel() {
@@ -25,18 +28,12 @@ export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
 
   return (
     <Modal>
-      {loadingHome ? (
-        <span>Carregando...</span>
-      ) : (
-        <>
-          <H2 label="Deseja mesma apagar essa lista?" color="black" />
-          <span className="text-neutral-700">{props.listName}</span>
-          <div className="flex justify-between w-full gap-2 mt-4">
-            <Button typeBtn="button" color="danger" label="Cancelar" onClick={handleCancel} />
-            <Button typeBtn="button" color="success" label="Deletar" onClick={handleDelete} />
-          </div>
-        </>
-      )}
+      <H2 label="Deseja mesma apagar essa lista?" color="black" />
+      <span className="text-neutral-700">{props.listName}</span>
+      <div className="flex justify-between w-full gap-2 mt-4">
+        <Button typeBtn="button" color="danger" label="Cancelar" onClick={handleCancel} />
+        <Button typeBtn="button" color="success" label="Deletar" onClick={handleDelete} />
+      </div>
     </Modal>
   )
 }

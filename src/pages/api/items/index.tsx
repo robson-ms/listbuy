@@ -21,6 +21,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       }
     } else {
       const items = await prisma.item.findMany()
+      return res.status(200).json({
+        data: items,
+      })
     }
   } else if (method === 'POST') {
     const { title, price, amount, valueTotal, listId } = req.body

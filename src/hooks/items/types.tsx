@@ -1,9 +1,9 @@
 export interface ItemTypes {
   id: number
   title: string
-  price: string
+  price: number
   amount: number
-  valueTotal: string
+  valueTotal: number
   createdAt: string
   updatedAt: string
   listId: number

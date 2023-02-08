@@ -1,6 +1,7 @@
+import { HeaderComponent } from '@/components/header'
 import { Plus } from 'phosphor-react'
 import React from 'react'
-import { H1 } from './text'
+import { H1 } from '../../../components/text'
 
 type HeaderTypes = {
   handleOpenModal?: () => void
@@ -8,7 +9,7 @@ type HeaderTypes = {
 
 export default function Header(props: HeaderTypes) {
   return (
-    <div className="max-w-screen-md w-full h-16 flex bg-primary px-4 py-2 items-center justify-between drop-shadow-md">
+    <HeaderComponent>
       <H1 label="Lista" color="white" />
 
       <button
@@ -18,6 +19,6 @@ export default function Header(props: HeaderTypes) {
       >
         <Plus size={20} className="text-primary" />
       </button>
-    </div>
+    </HeaderComponent>
   )
 }

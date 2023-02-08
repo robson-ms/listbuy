@@ -2,6 +2,7 @@ import { PencilSimple, ShoppingCartSimple } from 'phosphor-react'
 import { ItemTypes } from '@/hooks/items/types'
 import { useLists } from '@/hooks/lists'
 import { useItem } from '@/hooks/items'
+import { valueToCurrency } from '@/utils/mask'
 
 interface TableTypes {
   item: ItemTypes[] | []
@@ -31,7 +32,7 @@ export default function Table(props: TableTypes) {
           <thead>
             <tr className="flex justify-between px-4 py-2 text-neutral-700 text-base border border-default bg-neutral-100">
               <th>Nome</th>
-              <th className="w-1/5 min-w-max">Ações</th>
+              <th className="w-20">Ações</th>
             </tr>
           </thead>
           {props.item?.map(item => (
@@ -40,11 +41,13 @@ export default function Table(props: TableTypes) {
                 <td>
                   <span className="text-base font-normal text-neutral-700">{item.title}</span>
                   <div className="-mt-1">
-                    <span className="text-xs font-normal text-neutral-500">{`${item.amount} x ${item.price} = ${item.amount}`}</span>
+                    <span className="text-xs font-normal text-neutral-500">{`${item.amount} x ${valueToCurrency(
+                      Number(item.price)
+                    )} = ${valueToCurrency(Number(item.valueTotal))}`}</span>
                   </div>
                 </td>
 
-                <td className="flex justify-center items-center gap-4 w-1/5 min-w-max">
+                <td className="flex justify-center items-center gap-4 w-1/7 min-w-max">
                   <button
                     type="button"
                     className="flex w-8 h-8 justify-center items-center bg-green-700 rounded-full"

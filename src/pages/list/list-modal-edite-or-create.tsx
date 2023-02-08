@@ -1,8 +1,10 @@
-import Button from '@/components/Button'
+import Button from '@/components/button'
+import Input from '@/components/Input'
 import Modal from '@/components/Modal'
 import { H2 } from '@/components/text'
 import { useItem } from '@/hooks/items'
-import { useForm } from 'react-hook-form'
+import { maskCurrency, unMaskCurrency, unMaskCurrencySubmit } from '@/utils/mask'
+import { useEffect, useState } from 'react'
 interface AddItemModalTypes {
   isVisible: boolean
   setIsVisible: any
@@ -11,39 +13,49 @@ interface AddItemModalTypes {
 }
 
 export default function ModalEditeOrCreate(props: AddItemModalTypes) {
-  const { item, setItem, itemId, postItem, updateItem, deleteItem } = useItem()
+  const { item, setItem, itemId, closeModal, postItem, updateItem, deleteItem } = useItem()
+  const [title, setTitle] = useState(item.title ? item.title : '')
+  const [amount, setAmount] = useState(item.amount ? item.amount : '')
+  const [price, setPrice] = useState(item.price ? item.price : '')
+  const [valueTotal, setValueTotal] = useState(item.valueTotal ? item.valueTotal : '')
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      title: item.title ? item.title : '',
-      amount: item.amount ? item.amount : '',
-      price: item.price ? item.price : '',
-      valueTotal: item.valueTotal ? item.valueTotal : '',
-    },
-  })
+  useEffect(() => {
+    const newPrice = unMaskCurrency(String(price))
+    setValueTotal(maskCurrency(String(Number(amount) * Number(newPrice))))
+  }, [amount, price])
 
-  function handleSubmitCreateOrEdite(data: any) {
+  async function handleSubmitCreateOrEdite(e: any) {
+    e.preventDefault()
+    const data = {
+      title: title,
+      price: Number(unMaskCurrencySubmit(String(price))),
+      amount: Number(amount),
+      valueTotal: Number(unMaskCurrencySubmit(String(valueTotal))),
+      listId: Number(props.listId),
+    }
     if (props.type === 'create') {
-      postItem({
-        ...data,
-        listId: Number(props.listId),
-      })
+      await postItem(data)
+
+      if (closeModal) {
+        props.setIsVisible(!props.isVisible)
+      }
     } else {
-      updateItem({
-        itemId,
-        ...data,
-      })
+      await updateItem({ ...data, itemId: Number(itemId) })
+
+      if (closeModal) {
+        props.setIsVisible(!props.isVisible)
+      }
     }
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (itemId) {
-      deleteItem(itemId)
-      setItem(itemId, {})
+      await deleteItem(itemId)
+      setItem({})
+    }
+
+    if (closeModal) {
+      props.setIsVisible(!props.isVisible)
     }
   }
 
@@ -59,40 +71,28 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
           <H2 label="Add New Items" color="black" />
         </div>
 
-        <form onSubmit={handleSubmit(handleSubmitCreateOrEdite)}>
-          <input
+        <form onSubmit={handleSubmitCreateOrEdite}>
+          <Input
             type="text"
-            {...register('title')}
             placeholder="Titulo"
-            className="w-full border-2 px-4 h-12 border-neutral-300 rounded-lg text-neutral-700 text-base focus:border-1 focus:outline-none focus:border-primary  focus:ring-primary"
+            onChange={e => setTitle(e.currentTarget.value)}
+            defaultValue={item.title ? item.title : title}
           />
 
           <div className="flex gap-2 mt-2 text-neutral-700 text-sm">
             <div className="flex flex-col items-center">
-              <label htmlFor="titulo">Unidades</label>
-              <input
-                type="text"
-                {...register('amount')}
-                className="w-full border-2 px-4 h-9 border-neutral-300 rounded-lg text-neutral-700 text-base focus:border-1 focus:outline-none focus:border-primary  focus:ring-primary"
-              />
+              <label htmlFor="amount">Unidades</label>
+              <Input type="text" onChange={e => setAmount(e.currentTarget.value)} value={amount} />
             </div>
 
             <div className="flex flex-col items-center">
-              <label htmlFor="titulo">Preço</label>
-              <input
-                type="text"
-                {...register('price')}
-                className="w-full border-2 px-4 h-9 border-neutral-300 rounded-lg text-neutral-700 text-base focus:border-1 focus:outline-none focus:border-primary  focus:ring-primary"
-              />
+              <label htmlFor="price">Preço</label>
+              <Input type="text" onChange={e => setPrice(maskCurrency(e.currentTarget.value))} value={price} />
             </div>
 
             <div className="flex flex-col items-center">
-              <label htmlFor="titulo">Total</label>
-              <input
-                type="text"
-                {...register('valueTotal')}
-                className="w-full border-2 px-4 h-9 border-neutral-300 rounded-lg text-neutral-700 text-base focus:border-1 focus:outline-none focus:border-primary  focus:ring-primary"
-              />
+              <label htmlFor="total">Total</label>
+              <Input disabled type="text" value={valueTotal} />
             </div>
           </div>
           <div className="mt-4">
@@ -100,7 +100,7 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
               <Button typeBtn="submit" color="danger" label="Apagar" onClick={() => handleDelete()} />
               <Button typeBtn="submit" color="success" label="Salva" />
             </div>
-            <Button typeBtn="button" label="Cancelar" onClick={handleCancel} />
+            <Button typeBtn="button" color="default" label="Cancelar" onClick={handleCancel} />
           </div>
         </form>
       </div>

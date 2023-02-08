@@ -1,12 +1,14 @@
 import api from '@/services/api'
+import { useRouter } from 'next/router'
 import React, { createContext, useCallback, useState, useContext, ReactNode } from 'react'
+import { toast } from 'react-toastify'
 import { ListTypes } from './types'
 
 export interface ListsContextData {
   listItems: ListTypes
   error: any
   loading: boolean
-  loadingHome: boolean
+  closeModal: boolean
   postLists(title: string): Promise<void>
   deleteLists(id: number): Promise<void>
   featchListItems(id: number): Promise<void>
@@ -20,9 +22,15 @@ const ListsContext = createContext<ListsContextData>({} as ListsContextData)
 
 const ListsProvider = ({ children }: ListProviderTypes) => {
   const [listItems, setListItems] = useState<ListTypes>({} as ListTypes)
-  const [loadingHome, setLoadingHome] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
+  const [closeModal, setCloseModal] = useState(false)
+
+  const router = useRouter()
+
+  const refreshData = () => {
+    router.replace('/')
+  }
 
   const featchListItems = useCallback(async (id: number) => {
     try {
@@ -42,32 +50,42 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   }, [])
 
   const postLists = useCallback(async (title: string) => {
+    const load = toast.loading('Carregando...')
     try {
-      setLoadingHome(true)
-      await api.post('/api/lists', {
+      const res = await api.post('/api/lists', {
         title: title,
       })
+      if (res.status < 300) {
+        setCloseModal(true)
+        refreshData()
+      }
+
+      toast.update(load, { render: 'Cadastro com sucesso', type: 'success', isLoading: false, autoClose: 3000 })
     } catch (err) {
+      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 3000 })
       console.log(err)
-      setError(err)
-    } finally {
-      setLoadingHome(false)
     }
   }, [])
 
   const deleteLists = useCallback(async (id: number) => {
+    const load = toast.loading('Carregando...')
     try {
-      setLoadingHome(true)
-      await api.delete(`/api/lists`, {
+      const res = await api.delete(`/api/lists`, {
         params: {
           id,
         },
       })
+
+      if (res.status < 300) {
+        setCloseModal(true)
+        refreshData()
+      }
+
+      toast.update(load, { render: 'Lista apagada com sucesso', type: 'success', isLoading: false, autoClose: 3000 })
     } catch (err) {
       console.log(err)
+      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 3000 })
       setError(err)
-    } finally {
-      setLoadingHome(false)
     }
   }, [])
 
@@ -77,7 +95,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         listItems,
         error,
         loading,
-        loadingHome,
+        closeModal,
         postLists,
         deleteLists,
         featchListItems,

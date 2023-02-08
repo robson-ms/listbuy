@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react'
 import Modal from '@/components/Modal'
 import Input from '@/components/Input'
-import Button from '@/components/Button'
+import Button from '@/components/button'
 import { useLists } from '@/hooks/lists'
 
 type ModalTypes = {
@@ -11,13 +11,14 @@ type ModalTypes = {
 
 export default function ListModal(props: ModalTypes) {
   const [valueInput, setValueInput] = useState('')
-  const { postLists, loadingHome } = useLists()
+  const { postLists, closeModal } = useLists()
 
   async function handleCreate() {
-    postLists(valueInput)
+    await postLists(valueInput)
 
-    // colocar validação de erro para fechar ou não
-    props.setIsVisibleModalCreate(false)
+    if (closeModal) {
+      props.setIsVisibleModalCreate(false)
+    }
   }
 
   function handleCancel() {
@@ -27,22 +28,16 @@ export default function ListModal(props: ModalTypes) {
 
   return (
     <Modal>
-      {loadingHome ? (
-        <span>Carregando...</span>
-      ) : (
-        <>
-          <span className="text-neutral-700 font-bold text-base mb-4">Nova lista</span>
-          <Input
-            placeholder="nome da nova lista"
-            value={valueInput}
-            onChange={(event: FormEvent<HTMLInputElement>) => setValueInput(event.currentTarget.value)}
-          />
-          <div className="flex justify-between w-full gap-2 mt-4">
-            <Button typeBtn="button" color="danger" label="Cancelar" onClick={handleCancel} />
-            <Button typeBtn="button" color="success" label="Criar" onClick={handleCreate} />
-          </div>
-        </>
-      )}
+      <span className="text-neutral-700 font-bold text-base mb-4">Nova lista</span>
+      <Input
+        placeholder="nome da nova lista"
+        value={valueInput}
+        onChange={(event: FormEvent<HTMLInputElement>) => setValueInput(event.currentTarget.value)}
+      />
+      <div className="flex justify-between w-full gap-2 mt-4">
+        <Button typeBtn="button" color="danger" label="Cancelar" onClick={handleCancel} />
+        <Button typeBtn="button" color="success" label="Salvar" onClick={handleCreate} />
+      </div>
     </Modal>
   )
 }

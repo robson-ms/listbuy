@@ -1,18 +1,18 @@
-import { H1 } from '@/components/text'
-import Table from './table'
 import { useRouter } from 'next/router'
 import { useLists } from '@/hooks/lists'
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Plus } from 'phosphor-react'
-import Loading from '@/components/Loading'
-import ModalEditeOrCreate from './list-modal-edite-or-create'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
+import Loading from '@/components/Loading'
+import ModalEditeOrCreate from './list-modal-edite-or-create'
+import Table from './table'
+import Layout from '@/components/layout'
+import Header from './header'
 
 export default function List(props: any) {
-  const { featchListItems, listItems, loading } = useLists()
+  const { featchListItems, listItems, loading, closeModal } = useLists()
   const [isVisible, setIsVisible] = useState(false)
-  const [typeEditeOrCreate, setTypeEditeOrCreate] = useState('asd')
+  const [typeEditeOrCreate, setTypeEditeOrCreate] = useState('')
 
   const router = useRouter()
   const { id } = router.query
@@ -22,7 +22,6 @@ export default function List(props: any) {
   }, [])
 
   function handleBack() {
-    localStorage.removeItem('LIST_ID')
     router.push('/')
   }
 
@@ -32,24 +31,10 @@ export default function List(props: any) {
   }
 
   return (
-    <div className="flex w-screen h-screen flex-col items-center bg-neutral-100">
-      <div className="max-w-screen-md w-full h-16 flex bg-primary p-4 py-2 justify-between items-center drop-shadow-md">
-        <div className="flex">
-          <div className="mr-2">
-            <ArrowLeft size={25} color="#fff" onClick={() => handleBack()} />
-          </div>
-          <H1 label={`${listItems?.title ? listItems?.title : ''}`} color="white" />
-        </div>
-        <button
-          type="button"
-          className="flex w-8 h-8 justify-center items-center bg-white rounded-full"
-          onClick={handleCreateNewItem}
-        >
-          <Plus size={20} className="text-primary" />
-        </button>
-      </div>
+    <Layout>
+      <Header handleCreateNewItem={handleCreateNewItem} title={listItems?.title} handleBack={handleBack} />
 
-      <div className="w-full h-full max-w-screen-md bg-default overflow-auto">
+      <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg">
         {loading ? (
           <Loading text="Carregando..." />
         ) : (
@@ -70,7 +55,7 @@ export default function List(props: any) {
           type={typeEditeOrCreate}
         />
       )}
-    </div>
+    </Layout>
   )
 }
 
