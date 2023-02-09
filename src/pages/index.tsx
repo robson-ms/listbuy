@@ -7,6 +7,7 @@ import Head from 'next/head'
 import ListComponent from './components/home/list-components'
 import ListModalCreate from './components/home/list-modal-create'
 import ListModalDeleteConfirme from './components/home/list-modal-delete-confirme'
+import { CartVazio } from '@/components/cart/cart-vazio'
 
 interface TypesList {
   lists: ListTypes[]
@@ -42,9 +43,9 @@ export default function Home({ lists }: TypesList) {
           <Header handleOpenModal={handleOpenModal} />
 
           <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg">
-            {loading ? (
-              <div className="flex w-full h-full justify-center items-center">
-                <span>Carregando ...</span>
+            {lists.length === 0 ? (
+              <div className="flex w-full h-full justify-center items-center ">
+                <CartVazio menseger="Não há lista cadastrada" />
               </div>
             ) : (
               lists.map(list => <ListComponent list={list} key={list.id} handleDelete={() => handleDelete(list)} />)

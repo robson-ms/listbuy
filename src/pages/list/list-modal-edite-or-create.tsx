@@ -13,7 +13,7 @@ interface AddItemModalTypes {
 }
 
 export default function ModalEditeOrCreate(props: AddItemModalTypes) {
-  const { item, setItem, itemId, closeModalItem, postItem, updateItem, deleteItem } = useItem()
+  const { item, setItem, itemId, setCloseModalItem, closeModalItem, postItem, updateItem, deleteItem } = useItem()
   const [title, setTitle] = useState(item.title ? item.title : '')
   const [amount, setAmount] = useState(item.amount ? item.amount : '')
   const [price, setPrice] = useState(item.price ? item.price : '')
@@ -22,21 +22,30 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
   useEffect(() => {
     const newPrice = unMaskCurrency(String(price))
     setValueTotal(maskCurrency(String(Number(amount) * Number(newPrice))))
-  }, [amount, price])
 
-  useEffect(() => {
-    if (closeModalItem) {
+    if (closeModalItem && props.type === 'edite') {
       props.setIsVisible(!props.isVisible)
     }
-  }, [closeModalItem])
+
+    if (closeModalItem && props.type === 'create') {
+      setTitle('')
+      setAmount('')
+      setPrice('')
+      setCloseModalItem(false)
+    }
+  }, [amount, price, closeModalItem])
+
+  useEffect(() => {
+    setPrice(maskCurrency(String(item.price)))
+  }, [])
 
   async function handleSubmitCreateOrEdite(e: any) {
     e.preventDefault()
     const data = {
       title: title,
-      price: Number(unMaskCurrencySubmit(String(price))),
+      price: parseFloat(unMaskCurrencySubmit(String(price))),
       amount: Number(amount),
-      valueTotal: Number(unMaskCurrencySubmit(String(valueTotal))),
+      valueTotal: parseFloat(unMaskCurrencySubmit(String(valueTotal))),
       listId: Number(props.listId),
     }
     if (props.type === 'create') {
@@ -65,17 +74,12 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
           <H2 label="Add New Items" color="black" />
         </div>
 
-        <Input
-          type="text"
-          placeholder="Titulo"
-          onChange={e => setTitle(e.currentTarget.value)}
-          defaultValue={item.title ? item.title : title}
-        />
+        <Input type="text" placeholder="Titulo" onChange={e => setTitle(e.currentTarget.value)} value={title} />
 
         <div className="flex gap-2 mt-2 text-neutral-700 text-sm">
           <div className="flex flex-col items-center">
             <label htmlFor="amount">Unidades</label>
-            <Input type="text" onChange={e => setAmount(e.currentTarget.value)} value={amount} />
+            <Input type="number" onChange={e => setAmount(e.currentTarget.value)} value={amount} />
           </div>
 
           <div className="flex flex-col items-center">

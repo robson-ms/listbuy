@@ -1,7 +1,7 @@
 import { PencilSimple, ShoppingCartSimple } from 'phosphor-react'
 import { ItemTypes } from '@/hooks/items/types'
 import { useItem } from '@/hooks/items'
-import { valueToCurrency } from '@/utils/mask'
+import { maskCurrency } from '@/utils/mask'
 import { CartVazio } from '@/components/cart/cart-vazio'
 
 interface TableTypes {
@@ -39,9 +39,11 @@ export default function Table(props: TableTypes) {
                 <td>
                   <span className="text-base font-normal text-neutral-700">{item.title}</span>
                   <div className="-mt-1">
-                    <span className="text-xs font-normal text-neutral-500">{`${item.amount} x ${valueToCurrency(
-                      Number(item.price)
-                    )} = ${valueToCurrency(Number(item.valueTotal))}`}</span>
+                    <span className="text-xs font-normal text-neutral-500">
+                      {`${item.amount} x R$${maskCurrency(String(item.price))} = R$${maskCurrency(
+                        String(item.valueTotal)
+                      )}`}
+                    </span>
                   </div>
                 </td>
 

@@ -26,7 +26,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       })
     }
   } else if (method === 'POST') {
-    const { title, price, amount, valueTotal, listId } = req.body
+    const { title, price, amount, valueTotal, listId, inTheCart } = req.body
 
     const item = await prisma.item.create({
       data: {
@@ -35,6 +35,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         amount,
         valueTotal,
         listId,
+        inTheCart,
       },
     })
 

@@ -48,6 +48,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
   const [closeModalItem, setCloseModalItem] = useState<boolean | undefined>()
 
   const postItem = useCallback(async (data: ItemPostTypes) => {
+    console.log('data', data)
     const load = toast.loading('Carregando...')
 
     try {
@@ -57,6 +58,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         amount: Number(data.amount),
         valueTotal: Number(data.valueTotal),
         listId: Number(data.listId),
+        inTheCart: false,
       })
 
       if (res.status < 300) {

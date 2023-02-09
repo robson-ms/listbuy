@@ -6,5 +6,6 @@ export interface ItemTypes {
   valueTotal: number
   createdAt: string
   updatedAt: string
+  inTheCart: boolean
   listId: number
 }

@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useEffect } from 'react'
 import Modal from '@/components/Modal'
 import Input from '@/components/Input'
 import Button from '@/components/button'
@@ -12,6 +12,12 @@ type ModalTypes = {
 export default function ListModal(props: ModalTypes) {
   const [valueInput, setValueInput] = useState('')
   const { postLists, closeModal } = useLists()
+
+  useEffect(() => {
+    if (closeModal) {
+      props.setIsVisibleModalCreate(!props.isVisibleModalCreate)
+    }
+  }, [closeModal])
 
   async function handleCreate() {
     await postLists(valueInput)
