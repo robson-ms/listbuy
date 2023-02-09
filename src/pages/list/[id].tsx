@@ -12,7 +12,7 @@ import { Loading } from '@/components/loading'
 
 export default function List(props: any) {
   const { featchListItems, listItems, loading } = useLists()
-  const { setCloseModalItem, setItem } = useItem()
+  const { closeModalItem, setCloseModalItem, setItem } = useItem()
   const [isVisible, setIsVisible] = useState(false)
   const [typeEditeOrCreate, setTypeEditeOrCreate] = useState('')
 
@@ -22,6 +22,12 @@ export default function List(props: any) {
   useEffect(() => {
     featchListItems(Number(id) | props.LIST_ID)
   }, [])
+
+  useEffect(() => {
+    if (closeModalItem) {
+      featchListItems(Number(id) | props.LIST_ID)
+    }
+  }, [closeModalItem])
 
   function handleBack() {
     router.back()

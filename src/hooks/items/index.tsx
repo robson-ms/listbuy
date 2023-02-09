@@ -111,13 +111,13 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
       }
 
       toast.update(load, {
-        render: 'Produto atualizado com sucesso',
+        render: 'Produto apagado com sucesso',
         type: 'success',
         isLoading: false,
         autoClose: 2000,
       })
     } catch (err) {
-      toast.update(load, { render: 'Erro ao atualizar', type: 'error', isLoading: false, autoClose: 2000 })
+      toast.update(load, { render: 'Erro ao apagar', type: 'error', isLoading: false, autoClose: 2000 })
       console.log(err)
     }
   }, [])

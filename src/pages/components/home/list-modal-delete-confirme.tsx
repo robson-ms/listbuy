@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useEffect } from 'react'
+import { useEffect } from 'react'
 import Modal from '@/components/Modal'
 import Button from '@/components/button'
 import { useLists } from '@/hooks/lists'
