@@ -3,35 +3,30 @@ import { useLists } from '@/hooks/lists'
 import { useEffect, useState } from 'react'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
-import ModalEditeOrCreate from './list-modal-edite-or-create'
-import Table from './table'
+import Table from '../../table'
 import Layout from '@/components/layout'
-import Header from './header'
+import Header from '../../header'
 import { useItem } from '@/hooks/items'
 import { Loading } from '@/components/loading'
-import { ItemTypes } from '@/hooks/items/types'
 import { maskCurrency } from '@/utils/mask'
-import { ShoppingCartSimple } from 'phosphor-react'
-import { ButtonToCart } from '@/components/button-to-cart'
+import { ItemTypes } from '@/hooks/items/types'
 
 export default function List(props: any) {
-  const { featchListItems, listItems, loading, lengthItemsFromCart } = useLists()
-  const { closeModalItem, setCloseModalItem, setItem } = useItem()
-  const [isVisible, setIsVisible] = useState(false)
-  const [typeEditeOrCreate, setTypeEditeOrCreate] = useState('')
+  const { featchListItems, listItems, loading } = useLists()
+  const { itemRemoveOrAddToCart, closeModalItem } = useItem()
 
   const router = useRouter()
   const { id } = router.query
 
   useEffect(() => {
-    const inTheCart = 0
+    const inTheCart = 1
     const data = { id: Number(id), inTheCart } || { id: props.LIST_ID, inTheCart }
     featchListItems(data)
   }, [])
 
   useEffect(() => {
     if (closeModalItem) {
-      const inTheCart = 0
+      const inTheCart = 1
       const data = { id: Number(id), inTheCart } || { id: props.LIST_ID, inTheCart }
       featchListItems(data)
     }
@@ -41,11 +36,9 @@ export default function List(props: any) {
     router.back()
   }
 
-  function handleCreateNewItem() {
-    setItem({})
-    setCloseModalItem(false)
-    setIsVisible(!isVisible)
-    setTypeEditeOrCreate('create')
+  function handleRemoveFromCart(id: number) {
+    const data = { itemId: id, inTheCart: 0 }
+    itemRemoveOrAddToCart(data)
   }
 
   const amountTotalList = listItems?.Item?.reduce((accumulator: any, object: ItemTypes) => {
@@ -63,35 +56,20 @@ export default function List(props: any) {
   return (
     <Layout>
       <Header
-        handleCreateNewItem={handleCreateNewItem}
+        title="Produtos no carrinho"
         handleBack={handleBack}
         amountTotalList={amountTotalList}
         valueTotalList={valueTotalList}
-        renderComponent="list"
+        renderComponent="inTheCart"
       />
 
-      <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg mt-1">
+      <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg">
         {loading ? (
           <Loading />
         ) : (
-          <Table
-            item={listItems?.Item}
-            isVisible={isVisible}
-            setIsVisible={setIsVisible}
-            setTypeEditeOrCreate={setTypeEditeOrCreate}
-            renderComponent="list"
-          />
+          <Table item={listItems.Item} handleRemoveFromCart={handleRemoveFromCart} renderComponent="inTheCart" />
         )}
       </div>
-      {isVisible && (
-        <ModalEditeOrCreate
-          isVisible={isVisible}
-          setIsVisible={setIsVisible}
-          listId={listItems?.id}
-          type={typeEditeOrCreate}
-        />
-      )}
-      <ButtonToCart lengthItems={lengthItemsFromCart} onClick={() => router.push(`/list/${props.LIST_ID}/cart`)} />
     </Layout>
   )
 }

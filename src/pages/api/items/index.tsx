@@ -44,23 +44,38 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     })
   } else if (method === 'PATCH') {
     const { id } = req.query
-    const { title, price, amount, valueTotal } = req.body
+    const { title, price, amount, valueTotal, inTheCart } = req.body
 
-    const item = await prisma.item.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        title,
-        price,
-        amount,
-        valueTotal,
-      },
-    })
+    if (inTheCart === 0 || inTheCart === 1) {
+      const item = await prisma.item.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          inTheCart,
+        },
+      })
 
-    return res.status(200).json({
-      data: item,
-    })
+      return res.status(200).json({
+        data: item,
+      })
+    } else {
+      const item = await prisma.item.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          title,
+          price,
+          amount,
+          valueTotal,
+        },
+      })
+
+      return res.status(200).json({
+        data: item,
+      })
+    }
   } else if (method === 'DELETE') {
     const { id } = req.query
 

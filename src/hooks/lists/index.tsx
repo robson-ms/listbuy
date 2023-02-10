@@ -9,9 +9,15 @@ export interface ListsContextData {
   error: any
   loading: boolean
   closeModal: boolean | undefined
+  lengthItemsFromCart: number
   postLists(title: string): Promise<void>
   deleteLists(id: number): Promise<void>
-  featchListItems(id: number): Promise<void>
+  featchListItems(data: FeatchListItemsTypes): Promise<void>
+}
+
+interface FeatchListItemsTypes {
+  id: number
+  inTheCart: number
 }
 
 interface ListProviderTypes {
@@ -25,6 +31,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
   const [closeModal, setCloseModal] = useState<boolean | undefined>()
+  const [lengthItemsFromCart, setLengthItemsFromCart] = useState(0)
 
   const router = useRouter()
 
@@ -32,15 +39,38 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
     router.replace('/')
   }
 
-  const featchListItems = useCallback(async (id: number) => {
+  const featchListItems = useCallback(async (data: FeatchListItemsTypes) => {
     try {
       setLoading(true)
-      const res = await api.get(`/api/lists`, {
-        params: {
-          id,
-        },
-      })
-      setListItems(res.data.data)
+      if (data.inTheCart === 0) {
+        const res = await api.get(`/api/lists`, {
+          params: {
+            id: data.id,
+            inTheCart: data.inTheCart,
+          },
+        })
+        setListItems(res.data.data)
+
+        const res2 = await api.get(`/api/lists`, {
+          params: {
+            id: data.id,
+            inTheCart: 1,
+          },
+        })
+        setLengthItemsFromCart(res2.data.data.Item.length)
+      }
+
+      if (data.inTheCart === 1) {
+        const res = await api.get(`/api/lists`, {
+          params: {
+            id: data.id,
+            inTheCart: data.inTheCart,
+          },
+        })
+
+        setListItems(res.data.data)
+        setLengthItemsFromCart(res.data.data.Item.length)
+      }
     } catch (err) {
       console.log(err)
       setError(err)
@@ -55,8 +85,9 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
     try {
       const res = await api.post('/api/lists', {
         title: title,
+        isDone: 0,
       })
-      if (res.status < 300) {
+      if (res.status === 200) {
         setCloseModal(true)
         refreshData()
       }
@@ -78,7 +109,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         },
       })
 
-      if (res.status < 300) {
+      if (res.status === 200) {
         setCloseModal(true)
         refreshData()
       }
@@ -98,6 +129,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         error,
         loading,
         closeModal,
+        lengthItemsFromCart,
         postLists,
         deleteLists,
         featchListItems,

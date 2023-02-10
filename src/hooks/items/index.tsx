@@ -15,13 +15,18 @@ export interface ItemPostTypes {
   listId: number
 }
 
-export interface ItemUpdateTypes {
+interface ItemUpdateTypes {
+  inTheCart?: boolean
   itemId: number
-  title: string
-  amount: number
-  price: number
-  valueTotal: number
-  listId: number
+  title?: string
+  amount?: number
+  price?: number
+  valueTotal?: number
+}
+
+interface ItemRemoveOrAddToCartTypes {
+  inTheCart: number
+  itemId: number
 }
 
 export interface ItemContextData {
@@ -36,6 +41,7 @@ export interface ItemContextData {
   postItem(data: ItemPostTypes): Promise<void>
   updateItem(data: ItemUpdateTypes): Promise<void>
   deleteItem(id: number): Promise<void>
+  itemRemoveOrAddToCart(data: ItemRemoveOrAddToCartTypes): Promise<void>
 }
 
 const ListsContext = createContext<ItemContextData>({} as ItemContextData)
@@ -48,7 +54,6 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
   const [closeModalItem, setCloseModalItem] = useState<boolean | undefined>()
 
   const postItem = useCallback(async (data: ItemPostTypes) => {
-    console.log('data', data)
     const load = toast.loading('Carregando...')
 
     try {
@@ -58,7 +63,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         amount: Number(data.amount),
         valueTotal: Number(data.valueTotal),
         listId: Number(data.listId),
-        inTheCart: false,
+        inTheCart: 0,
       })
 
       if (res.status < 300) {
@@ -81,7 +86,6 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         price: Number(data.price),
         amount: Number(data.amount),
         valueTotal: Number(data.valueTotal),
-        listId: Number(data.listId),
       })
       if (res.status === 200) {
         setCloseModalItem(true)
@@ -95,6 +99,30 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
       })
     } catch (err) {
       toast.update(load, { render: 'Erro ao atualizar', type: 'error', isLoading: false, autoClose: 2000 })
+      console.log(err)
+    }
+  }, [])
+
+  const itemRemoveOrAddToCart = useCallback(async (data: ItemRemoveOrAddToCartTypes) => {
+    setCloseModalItem(false)
+    const load = toast.loading('Carregando...')
+    try {
+      const res = await api.patch(`/api/items?id=${data.itemId}`, {
+        inTheCart: data.inTheCart,
+      })
+
+      if (res.status === 200) {
+        setCloseModalItem(true)
+      }
+
+      toast.update(load, {
+        render: 'Produto adicionado ao carrinho',
+        type: 'success',
+        isLoading: false,
+        autoClose: 2000,
+      })
+    } catch (err) {
+      toast.update(load, { render: 'Erro ao adicionar', type: 'error', isLoading: false, autoClose: 2000 })
       console.log(err)
     }
   }, [])
@@ -138,6 +166,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         deleteItem,
         updateItem,
         setCloseModalItem,
+        itemRemoveOrAddToCart,
       }}
     >
       {children}

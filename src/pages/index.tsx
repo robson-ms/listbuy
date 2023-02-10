@@ -42,7 +42,7 @@ export default function Home({ lists }: TypesList) {
         <Layout>
           <Header handleOpenModal={handleOpenModal} />
 
-          <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg">
+          <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg mt-1">
             {lists.length === 0 ? (
               <div className="flex w-full h-full justify-center items-center ">
                 <CartVazio menseger="Não há lista cadastrada" />

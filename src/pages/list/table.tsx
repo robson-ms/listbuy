@@ -1,19 +1,21 @@
-import { PencilSimple, ShoppingCartSimple } from 'phosphor-react'
+import { PencilSimple, ShoppingCartSimple, Trash } from 'phosphor-react'
 import { ItemTypes } from '@/hooks/items/types'
 import { useItem } from '@/hooks/items'
 import { maskCurrency } from '@/utils/mask'
 import { CartVazio } from '@/components/cart/cart-vazio'
+import { ButtonCircle } from '@/components/button-circle'
 
 interface TableTypes {
   item: ItemTypes[] | []
-  handleEdit: any
-  isVisible: boolean
-  setIsVisible: any
-  setTypeEditeOrCreate: any
+  isVisible?: boolean
+  setIsVisible?: any
+  setTypeEditeOrCreate?: any
+  handleRemoveFromCart?: any
+  renderComponent: 'list' | 'inTheCart'
 }
 
 export default function Table(props: TableTypes) {
-  const { setItemId, setItem, setCloseModalItem } = useItem()
+  const { setItemId, setItem, setCloseModalItem, itemRemoveOrAddToCart } = useItem()
 
   function handleEditeItem(item: ItemTypes) {
     setCloseModalItem(false)
@@ -21,6 +23,11 @@ export default function Table(props: TableTypes) {
     setItemId(item.id)
     props.setIsVisible(!props.isVisible)
     props.setTypeEditeOrCreate('edite')
+  }
+
+  function handleAddToCart(id: number) {
+    const data = { itemId: id, inTheCart: 1 }
+    itemRemoveOrAddToCart(data)
   }
 
   return (
@@ -47,23 +54,23 @@ export default function Table(props: TableTypes) {
                   </div>
                 </td>
 
-                <td className="flex justify-center items-center gap-4 w-1/7 min-w-max">
-                  <button
-                    type="button"
-                    className="flex w-8 h-8 justify-center items-center bg-green-700 rounded-full"
-                    onClick={() => console.log('onClick')}
-                  >
-                    <ShoppingCartSimple size={20} color="#fff" />
-                  </button>
+                {props.renderComponent === 'list' ? (
+                  <td className="flex justify-center items-center gap-4 w-1/7 min-w-max">
+                    <ButtonCircle color="success" onClick={() => handleAddToCart(item.id)}>
+                      <ShoppingCartSimple size={20} color="#fff" />
+                    </ButtonCircle>
 
-                  <button
-                    type="button"
-                    className="flex w-8 h-8 justify-center items-center bg-orange-500 rounded-full"
-                    onClick={() => handleEditeItem(item)}
-                  >
-                    <PencilSimple size={20} color="#fff" />
-                  </button>
-                </td>
+                    <ButtonCircle color="danger" onClick={() => handleEditeItem(item)}>
+                      <PencilSimple size={20} color="#fff" />
+                    </ButtonCircle>
+                  </td>
+                ) : (
+                  <td className="flex justify-end pr-5 items-center gap-4 w-1/6min-w-max">
+                    <ButtonCircle color="delete" onClick={() => props.handleRemoveFromCart(item.id)}>
+                      <Trash size={20} color="#fff" />
+                    </ButtonCircle>
+                  </td>
+                )}
               </tr>
             </tbody>
           ))}

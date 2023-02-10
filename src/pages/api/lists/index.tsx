@@ -3,16 +3,20 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const { method, query } = req
-  const { id } = query
+  const { id, inTheCart } = query
 
   if (method === 'GET') {
-    if (id) {
+    if (id && inTheCart) {
       const list = await prisma.list.findUnique({
         where: {
           id: Number(id),
         },
         include: {
-          Item: true,
+          Item: {
+            where: {
+              inTheCart: Number(inTheCart),
+            },
+          },
         },
       })
       return res.status(200).json({
@@ -25,12 +29,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       })
     }
   } else if (method === 'POST') {
-    const { title } = req.body
+    const { title, isDone } = req.body
 
     const list = await prisma.list.create({
       data: {
         title,
-        isDone: false,
+        isDone,
       },
     })
     return res.status(200).json({
