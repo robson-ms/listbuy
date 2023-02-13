@@ -1,10 +1,11 @@
 import { HeaderComponent } from '@/components/header'
 import { H1 } from '@/components/text'
 import { ArrowLeft, Plus } from 'phosphor-react'
-import { parseCookies } from 'nookies'
+import { useLists } from '@/hooks/lists'
+import { LoadingComponent } from '@/components/loading/component/inext'
 
 type HeaderTypes = {
-  title?: string
+  title: string
   handleBack?: any
   handleCreateNewItem?: any
   amountTotalList: number
@@ -13,7 +14,7 @@ type HeaderTypes = {
 }
 
 export default function Header(props: HeaderTypes) {
-  const cookie = parseCookies()
+  const { loading } = useLists()
 
   return (
     <HeaderComponent>
@@ -23,10 +24,16 @@ export default function Header(props: HeaderTypes) {
         </div>
 
         <div className="flex flex-col w-full justify-center items-center mr-5">
-          <H1 label={`${props.title ? props.title : cookie.LIST_NAME}`} color="white" />
-          <div className="font-normal text-sm text-white">
-            <span> {`${props?.amountTotalList} Produtos | Total R$${props?.valueTotalList}`} </span>
-          </div>
+          {loading ? (
+            <LoadingComponent />
+          ) : (
+            <>
+              <H1 label={props.title} color="white" />
+              <div className="font-normal text-sm text-white">
+                <span> {`${props?.amountTotalList} Produtos | Total R$${props?.valueTotalList}`} </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
       {props.renderComponent === 'list' && (

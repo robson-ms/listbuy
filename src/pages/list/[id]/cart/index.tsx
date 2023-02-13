@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { useLists } from '@/hooks/lists'
-import { useEffect, useState } from 'react'
-import { parseCookies } from 'nookies'
+import { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Table from '../../table'
 import Layout from '@/components/layout'
@@ -16,19 +15,14 @@ export default function List(props: any) {
   const { itemRemoveOrAddToCart, closeModalItem } = useItem()
 
   const router = useRouter()
-  const { id } = router.query
 
   useEffect(() => {
-    const inTheCart = 1
-    const data = { id: Number(id), inTheCart } || { id: props.LIST_ID, inTheCart }
-    featchListItems(data)
+    featchListItems({ id: props.LIST_ID, inTheCart: 1 })
   }, [])
 
   useEffect(() => {
     if (closeModalItem) {
-      const inTheCart = 1
-      const data = { id: Number(id), inTheCart } || { id: props.LIST_ID, inTheCart }
-      featchListItems(data)
+      featchListItems({ id: props.LIST_ID, inTheCart: 1 })
     }
   }, [closeModalItem])
 
@@ -75,11 +69,11 @@ export default function List(props: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const cookie = parseCookies(context)
+  const id = context.query.id
 
   return {
     props: {
-      LIST_ID: cookie.LIST_ID,
+      LIST_ID: id,
     },
   }
 }

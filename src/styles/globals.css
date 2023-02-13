@@ -10,4 +10,7 @@
     margin: 0;
     -moz-appearance: textfield !important;
   }
+  body {
+    background-color: #17474a;
+  }
 }

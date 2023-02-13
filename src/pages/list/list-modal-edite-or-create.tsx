@@ -84,7 +84,13 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
 
           <div className="flex flex-col items-center">
             <label htmlFor="price">Preço</label>
-            <Input type="text" onChange={e => setPrice(maskCurrency(e.currentTarget.value))} value={price} />
+            <Input
+              type="text"
+              pattern="[0-9]*"
+              inputMode="numeric"
+              onChange={e => setPrice(maskCurrency(e.currentTarget.value))}
+              value={price}
+            />
           </div>
 
           <div className="flex flex-col items-center">

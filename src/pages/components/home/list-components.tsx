@@ -3,7 +3,6 @@ import { H2, Span } from '@/components/text'
 import dayjs from 'dayjs'
 import { ListTypes } from 'lib/db'
 import { useRouter } from 'next/router'
-import { setCookie } from 'nookies'
 
 interface TypesList {
   list: ListTypes
@@ -19,16 +18,6 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
   function handleBuy(listId: number) {
     const id = listId.toString()
     router.push(`/list/${id}`)
-
-    setCookie(null, 'LIST_ID', id, {
-      maxAge: 60 * 60 * 24, // 24 horas
-      path: '/',
-    })
-
-    setCookie(null, 'LIST_NAME', list.title, {
-      maxAge: 60 * 60 * 24, // 24 horas
-      path: '/',
-    })
   }
 
   const createdAt = dayjs(list.createdAt).format('DD/MM/YYYY')
