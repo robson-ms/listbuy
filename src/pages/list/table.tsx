@@ -25,7 +25,7 @@ export default function Table(props: TableTypes) {
     props.setTypeEditeOrCreate('edite')
   }
 
-  function handleAddToCart(id: number) {
+  function handleAddToCart(id: string) {
     const data = { itemId: id, inTheCart: 1 }
     itemRemoveOrAddToCart(data)
   }

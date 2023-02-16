@@ -30,7 +30,7 @@ export default function List(props: any) {
     router.back()
   }
 
-  function handleRemoveFromCart(id: number) {
+  function handleRemoveFromCart(id: string) {
     const data = { itemId: id, inTheCart: 0 }
     itemRemoveOrAddToCart(data)
   }
