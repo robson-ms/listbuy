@@ -20,7 +20,7 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
     router.push(`/list/${id}`)
   }
 
-  const createdAt = dayjs(list.createdAt).format('DD/MM/YYYY')
+  const createdAt = dayjs(list?.createdAt).format('DD/MM/YYYY')
 
   return (
     <div className="w-full flex justify-center items-center overflow-auto">
