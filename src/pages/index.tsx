@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import Header from './components/home/header'
+import Header from '../components/home/header'
 import Layout from '@/components/layout'
-import { useLists } from '@/hooks/lists'
 import { getAllLists, ListTypes } from 'lib/db'
 import Head from 'next/head'
-import ListComponent from './components/home/list-components'
-import ListModalCreate from './components/home/list-modal-create'
-import ListModalDeleteConfirme from './components/home/list-modal-delete-confirme'
+import ListComponent from '../components/home/list-components'
+import ListModalCreate from '../components/home/list-modal-create'
+import ListModalDeleteConfirme from '../components/home/list-modal-delete-confirme'
 import { CartVazio } from '@/components/cart/cart-vazio'
 import { getSession } from 'next-auth/react'
 
@@ -19,7 +18,6 @@ export default function Home({ lists }: TypesList) {
   const [isVisibleModalDelete, setIsVisibleModalDelete] = useState(false)
   const [listId, setListId] = useState(0)
   const [listName, setListName] = useState('')
-  const { loading } = useLists()
 
   function handleOpenModal() {
     setIsVisibleModalCreate(!isVisibleModalCreate)
