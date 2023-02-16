@@ -8,6 +8,7 @@ import ListComponent from './components/home/list-components'
 import ListModalCreate from './components/home/list-modal-create'
 import ListModalDeleteConfirme from './components/home/list-modal-delete-confirme'
 import { CartVazio } from '@/components/cart/cart-vazio'
+import { getSession } from 'next-auth/react'
 
 interface TypesList {
   lists: ListTypes[]
@@ -72,9 +73,22 @@ export default function Home({ lists }: TypesList) {
   )
 }
 
-export async function getServerSideProps() {
-  const data = await getAllLists()
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context)
+  const userId = session?.user.id || ''
+  const data = await getAllLists(userId)
   const lists = JSON.parse(JSON.stringify(data))
+
+  console.log('session', session)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
 
   return { props: { lists } }
 }

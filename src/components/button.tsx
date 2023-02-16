@@ -6,10 +6,12 @@ type ButtonTypes = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButton
   label: string
   variant?: 'text'
   typeBtn: 'button' | 'submit'
+  disabled?: boolean | undefined
 }
 
 export default function Button(props: ButtonTypes) {
   let bgColor = ''
+  let cursor = ''
 
   if (props.color === 'default') bgColor = 'hover:bg-primary/90 bg-primary text-white h-10 px-4 text-white h-10 px-4'
 
@@ -23,10 +25,18 @@ export default function Button(props: ButtonTypes) {
   if (props.variant === 'text' && props.color === 'danger')
     bgColor = 'hover:text-orange-300 bg-transparent text-orange-500'
 
+  if (props.disabled) {
+    cursor = 'cursor-not-allowed'
+  }
+
   return (
     <button
       type={props.typeBtn}
-      className={classname('flex w-full justify-center items-center text-white font-emibold rounded-lg', bgColor)}
+      className={classname(
+        'flex w-full justify-center items-center text-white font-emibold rounded-lg ease-in duration-200',
+        bgColor,
+        cursor
+      )}
       {...props}
     >
       {props.label}

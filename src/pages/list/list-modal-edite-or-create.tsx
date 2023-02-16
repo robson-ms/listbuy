@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 interface AddItemModalTypes {
   isVisible: boolean
   setIsVisible: any
-  listId: number
+  listId: string
   type: string
 }
 
@@ -46,18 +46,18 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
       price: parseFloat(unMaskCurrencySubmit(String(price))),
       amount: Number(amount),
       valueTotal: parseFloat(unMaskCurrencySubmit(String(valueTotal))),
-      listId: Number(props.listId),
+      listId: props.listId,
     }
     if (props.type === 'create') {
       await postItem(data)
     } else {
-      await updateItem({ ...data, itemId: Number(itemId) })
+      await updateItem({ ...data, itemId: String(itemId) })
     }
   }
 
   async function handleDelete() {
     if (itemId) {
-      await deleteItem(itemId)
+      await deleteItem(String(itemId))
       setItem({})
     }
   }

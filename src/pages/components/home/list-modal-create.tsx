@@ -3,6 +3,7 @@ import Modal from '@/components/Modal'
 import Input from '@/components/Input'
 import Button from '@/components/button'
 import { useLists } from '@/hooks/lists'
+import { useSession } from 'next-auth/react'
 
 type ModalTypes = {
   isVisibleModalCreate: boolean
@@ -19,8 +20,11 @@ export default function ListModal(props: ModalTypes) {
     }
   }, [closeModal])
 
+  const session = useSession()
+  const userId = session?.data?.user?.id
+
   async function handleCreate() {
-    await postLists(valueInput)
+    await postLists(valueInput, String(userId))
 
     if (closeModal) {
       props.setIsVisibleModalCreate(false)

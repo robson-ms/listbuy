@@ -21,15 +21,19 @@ export interface ListTypes {
   Item: Item[]
 }
 
-export async function getAllLists() {
-  const data = await prisma.list.findMany()
+export async function getAllLists(userId: string) {
+  const data = await prisma.list.findMany({
+    where: {
+      userId,
+    },
+  })
   return data
 }
 
-export async function getList(id: number) {
+export async function getList(id: string) {
   const data = await prisma.list.findUnique({
     where: {
-      id: Number(id),
+      id: id,
     },
     include: {
       Item: true,

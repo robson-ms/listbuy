@@ -1,19 +1,9 @@
 import api from '@/services/api'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { createContext, useCallback, useState, useContext, ReactNode } from 'react'
 import { toast } from 'react-toastify'
 import { ListTypes } from './types'
-
-export interface ListsContextData {
-  listItems: ListTypes
-  error: any
-  loading: boolean
-  closeModal: boolean | undefined
-  lengthItemsFromCart: number
-  postLists(title: string): Promise<void>
-  deleteLists(id: number): Promise<void>
-  featchListItems(data: FeatchListItemsTypes): Promise<void>
-}
 
 interface FeatchListItemsTypes {
   id: number
@@ -22,6 +12,17 @@ interface FeatchListItemsTypes {
 
 interface ListProviderTypes {
   children: ReactNode
+}
+
+export interface ListsContextData {
+  listItems: ListTypes
+  error: any
+  loading: boolean
+  closeModal: boolean | undefined
+  lengthItemsFromCart: number
+  postLists(title: string, userId: string): Promise<void>
+  deleteLists(id: number): Promise<void>
+  featchListItems(data: FeatchListItemsTypes): Promise<void>
 }
 
 const ListsContext = createContext<ListsContextData>({} as ListsContextData)
@@ -79,12 +80,13 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
     }
   }, [])
 
-  const postLists = useCallback(async (title: string) => {
+  const postLists = useCallback(async (title: string, userId: string) => {
     setCloseModal(false)
     const load = toast.loading('Carregando...')
     try {
       const res = await api.post('/api/lists', {
-        title: title,
+        title,
+        userId,
         isDone: 0,
       })
       if (res.status === 200) {

@@ -9,7 +9,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     if (id && inTheCart) {
       const list = await prisma.list.findUnique({
         where: {
-          id: Number(id),
+          id: String(id),
         },
         include: {
           Item: {
@@ -29,10 +29,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       })
     }
   } else if (method === 'POST') {
-    const { title, isDone } = req.body
+    const { title, isDone, userId } = req.body
 
     const list = await prisma.list.create({
       data: {
+        userId,
         title,
         isDone,
       },
@@ -46,7 +47,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
     const list = await prisma.list.update({
       where: {
-        id: Number(id),
+        id: String(id),
       },
       data: {
         title,
@@ -61,7 +62,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
     const list = await prisma.list.delete({
       where: {
-        id: Number(id),
+        id: String(id),
       },
     })
     return res.status(200).json({

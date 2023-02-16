@@ -2,13 +2,13 @@ import classNames from 'classnames'
 import React from 'react'
 
 type InputTypes = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
-  height?: 36
+  height?: 40
 }
 
 export default function Input(props: InputTypes) {
   let height = ''
-  if (props.height === 36) {
-    height = 'h-9'
+  if (props.height === 40) {
+    height = 'h-10'
   } else {
     height = 'h-12'
   }

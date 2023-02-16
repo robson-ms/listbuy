@@ -9,7 +9,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     if (id) {
       const item = await prisma.item.findUnique({
         where: {
-          id: Number(id),
+          id: String(id),
         },
       })
       if (item === null) {
@@ -49,7 +49,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     if (inTheCart === 0 || inTheCart === 1) {
       const item = await prisma.item.update({
         where: {
-          id: Number(id),
+          id: String(id),
         },
         data: {
           inTheCart,
@@ -62,7 +62,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     } else {
       const item = await prisma.item.update({
         where: {
-          id: Number(id),
+          id: String(id),
         },
         data: {
           title,
@@ -81,7 +81,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
     const item = await prisma.item.delete({
       where: {
-        id: Number(id),
+        id: String(id),
       },
     })
 

@@ -12,12 +12,12 @@ export interface ItemPostTypes {
   amount: number
   price: number
   valueTotal: number
-  listId: number
+  listId: string
 }
 
 interface ItemUpdateTypes {
   inTheCart?: boolean
-  itemId: number
+  itemId: string
   title?: string
   amount?: number
   price?: number
@@ -26,21 +26,21 @@ interface ItemUpdateTypes {
 
 interface ItemRemoveOrAddToCartTypes {
   inTheCart: number
-  itemId: number
+  itemId: string
 }
 
 export interface ItemContextData {
   item: ItemTypes
   loading: boolean
   success: boolean
-  itemId: number | undefined
+  itemId: string | undefined
   setItemId: any
   setItem: any
   closeModalItem: boolean | undefined
   setCloseModalItem: any
   postItem(data: ItemPostTypes): Promise<void>
   updateItem(data: ItemUpdateTypes): Promise<void>
-  deleteItem(id: number): Promise<void>
+  deleteItem(id: string): Promise<void>
   itemRemoveOrAddToCart(data: ItemRemoveOrAddToCartTypes): Promise<void>
 }
 
@@ -49,7 +49,7 @@ const ListsContext = createContext<ItemContextData>({} as ItemContextData)
 const ItemProvider = ({ children }: ItemProviderTypes) => {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [itemId, setItemId] = useState<number | undefined>()
+  const [itemId, setItemId] = useState<string | undefined>()
   const [item, setItem] = useState<ItemTypes>({} as ItemTypes)
   const [closeModalItem, setCloseModalItem] = useState<boolean | undefined>()
 
@@ -62,7 +62,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         price: Number(data.price),
         amount: Number(data.amount),
         valueTotal: Number(data.valueTotal),
-        listId: Number(data.listId),
+        listId: String(data.listId),
         inTheCart: 0,
       })
 
@@ -127,7 +127,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
     }
   }, [])
 
-  const deleteItem = useCallback(async (id: number) => {
+  const deleteItem = useCallback(async (id: string) => {
     const load = toast.loading('Carregando...')
     try {
       const res = await api.delete(`/api/items`, {

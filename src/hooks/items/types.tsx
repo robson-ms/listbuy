@@ -1,5 +1,5 @@
 export interface ItemTypes {
-  id: number
+  id: string
   title: string
   price: number
   amount: number
@@ -7,5 +7,5 @@ export interface ItemTypes {
   createdAt: string
   updatedAt: string
   inTheCart: boolean
-  listId: number
+  listId: string
 }

@@ -41,12 +41,9 @@ export default function List(props: any) {
     setTypeEditeOrCreate('create')
   }
 
-  const amountTotalList = listItems?.Item?.reduce((amount: number, object: ItemTypes) => {
-    return amount + object.amount
-  }, 0)
-
   const valueTotalList = maskCurrency(
     String(
+      // @ts-ignore
       listItems?.Item?.reduce((amount: any, object: ItemTypes) => {
         return amount + object.valueTotal
       }, 0)
@@ -58,7 +55,7 @@ export default function List(props: any) {
       <Header
         handleCreateNewItem={handleCreateNewItem}
         handleBack={handleBack}
-        amountTotalList={amountTotalList}
+        amountTotalList={listItems.Item?.length}
         valueTotalList={valueTotalList}
         renderComponent="list"
         title={listItems.title}
