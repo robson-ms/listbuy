@@ -20,7 +20,7 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
     router.push(`/list/${id}`)
   }
 
-  const createdAt = dayjs(list?.createdAt).format('DD/MM/YYYY')
+  // const createdAt = dayjs(list?.createdAt).format('DD/MM/YYYY')
 
   return (
     <div className="w-full flex justify-center items-center overflow-auto">
@@ -29,7 +29,7 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
           <div className="-mb-5">
             <H2 color="black" label={list.title} />
           </div>
-          <Span color="black" label={`Criado: ${createdAt}`} />
+          {/* <Span color="black" label={`Criado: ${createdAt}`} /> */}
         </div>
 
         <div className="flex gap-4">
