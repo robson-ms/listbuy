@@ -77,8 +77,6 @@ export async function getServerSideProps(context: any) {
   const data = await getAllLists(userId)
   const lists = JSON.parse(JSON.stringify(data))
 
-  console.log('session', session)
-
   if (!session) {
     return {
       redirect: {
