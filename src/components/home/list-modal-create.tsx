@@ -12,13 +12,7 @@ type ModalTypes = {
 
 export default function ListModal(props: ModalTypes) {
   const [valueInput, setValueInput] = useState('')
-  const { postLists, closeModal } = useLists()
-
-  useEffect(() => {
-    if (closeModal) {
-      props.setIsVisibleModalCreate(!props.isVisibleModalCreate)
-    }
-  }, [closeModal])
+  const { postLists, statusText } = useLists()
 
   const session = useSession()
   const userId = session?.data?.user?.id
@@ -26,9 +20,11 @@ export default function ListModal(props: ModalTypes) {
   async function handleCreate() {
     await postLists(valueInput, String(userId))
 
-    if (closeModal) {
-      props.setIsVisibleModalCreate(false)
-    }
+    setTimeout(() => {
+      if (statusText === 'OK') {
+        props.setIsVisibleModalCreate(false)
+      }
+    }, 1000)
   }
 
   function handleCancel() {

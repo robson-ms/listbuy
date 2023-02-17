@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
 import Modal from '@/components/Modal'
 import Button from '@/components/button'
 import { useLists } from '@/hooks/lists'
-import { H2, Span } from '@/components/text'
+import { H2 } from '@/components/text'
 
 type ModalDeleteTypes = {
   isVisible: boolean
@@ -12,20 +11,16 @@ type ModalDeleteTypes = {
 }
 
 export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
-  const { deleteLists, closeModal } = useLists()
-
-  useEffect(() => {
-    if (closeModal) {
-      props.setIsVisible(false)
-    }
-  }, [closeModal])
+  const { deleteLists, statusText } = useLists()
 
   async function handleDelete() {
     await deleteLists(props.listId)
 
-    if (closeModal) {
-      props.setIsVisible(false)
-    }
+    setTimeout(() => {
+      if (statusText === 'OK') {
+        props.setIsVisible(false)
+      }
+    }, 1000)
   }
 
   function handleCancel() {

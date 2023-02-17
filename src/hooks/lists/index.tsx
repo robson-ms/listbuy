@@ -18,8 +18,8 @@ export interface ListsContextData {
   listItems: ListTypes
   error: any
   loading: boolean
-  closeModal: boolean | undefined
   lengthItemsFromCart: number
+  statusText: string
   postLists(title: string, userId: string): Promise<void>
   deleteLists(id: number): Promise<void>
   featchListItems(data: FeatchListItemsTypes): Promise<void>
@@ -31,12 +31,12 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   const [listItems, setListItems] = useState<ListTypes>({} as ListTypes)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
-  const [closeModal, setCloseModal] = useState<boolean | undefined>()
   const [lengthItemsFromCart, setLengthItemsFromCart] = useState(0)
+  const [statusText, setStatusText] = useState('')
 
   const router = useRouter()
 
-  async function refreshData() {
+  function refreshData() {
     router.replace('/')
   }
 
@@ -81,7 +81,6 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   }, [])
 
   const postLists = useCallback(async (title: string, userId: string) => {
-    setCloseModal(false)
     const load = toast.loading('Carregando...')
     try {
       const res = await api.post('/api/lists', {
@@ -89,9 +88,10 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         userId,
         isDone: 0,
       })
+      setStatusText(res.statusText)
+
       if (res.status === 200) {
-        await refreshData()
-        setCloseModal(true)
+        refreshData()
       }
 
       toast.update(load, { render: 'Cadastro com sucesso', type: 'success', isLoading: false, autoClose: 1000 })
@@ -102,7 +102,6 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
   }, [])
 
   const deleteLists = useCallback(async (id: number) => {
-    setCloseModal(false)
     const load = toast.loading('Carregando...')
     try {
       const res = await api.delete(`/api/lists`, {
@@ -110,10 +109,10 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
           id,
         },
       })
+      setStatusText(res.statusText)
 
       if (res.status === 200) {
-        await refreshData()
-        setCloseModal(true)
+        refreshData()
       }
 
       toast.update(load, { render: 'Lista apagada com sucesso', type: 'success', isLoading: false, autoClose: 1000 })
@@ -130,8 +129,8 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         listItems,
         error,
         loading,
-        closeModal,
         lengthItemsFromCart,
+        statusText,
         postLists,
         deleteLists,
         featchListItems,
