@@ -3,9 +3,12 @@ import { H1 } from '@/components/text'
 import { ArrowLeft, Plus } from 'phosphor-react'
 import { useLists } from '@/hooks/lists'
 import { LoadingComponent } from '@/components/loading/component/inext'
+import { ButtonToCart } from '@/components/button-to-cart'
+import { useRouter } from 'next/router'
 
 type HeaderTypes = {
   title: string
+  listId: string
   handleBack?: any
   handleCreateNewItem?: any
   amountTotalList: number
@@ -14,7 +17,9 @@ type HeaderTypes = {
 }
 
 export default function Header(props: HeaderTypes) {
-  const { loading } = useLists()
+  const { loading, lengthItemsFromCart } = useLists()
+
+  const router = useRouter()
 
   return (
     <HeaderComponent>
@@ -36,8 +41,10 @@ export default function Header(props: HeaderTypes) {
           )}
         </div>
       </div>
+
       {props.renderComponent === 'list' && (
-        <div className="flex justify-center items-center w-1.5/5 min-w-max">
+        <div className="flex justify-center items-center w-1.5/5 min-w-max gap-5">
+          <ButtonToCart lengthItems={lengthItemsFromCart} onClick={() => router.push(`/list/${props.listId}/cart`)} />
           <button
             type="button"
             className="flex w-8 h-8 justify-center items-center bg-white rounded-full hover:bg-white/70 ease-in duration-200"

@@ -11,10 +11,9 @@ import { useItem } from '@/hooks/items'
 import { Loading } from '@/components/loading'
 import { ItemTypes } from '@/hooks/items/types'
 import { maskCurrency } from '@/utils/mask'
-import { ButtonToCart } from '@/components/button-to-cart'
 
 export default function List(props: any) {
-  const { featchListItems, listItems, loading, lengthItemsFromCart } = useLists()
+  const { featchListItems, listItems, loading } = useLists()
   const { closeModalItem, setCloseModalItem, setItem } = useItem()
   const [isVisible, setIsVisible] = useState(false)
   const [typeEditeOrCreate, setTypeEditeOrCreate] = useState('')
@@ -65,6 +64,7 @@ export default function List(props: any) {
         amountTotalList={listItems.Item?.length}
         valueTotalList={valueTotalList}
         renderComponent="list"
+        listId={listItems.id}
         title={`Lista: ${listItems.title}`}
       />
 
@@ -89,8 +89,6 @@ export default function List(props: any) {
           type={typeEditeOrCreate}
         />
       )}
-
-      <ButtonToCart lengthItems={lengthItemsFromCart} onClick={() => router.push(`/list/${props.LIST_ID}/cart`)} />
     </Layout>
   )
 }
