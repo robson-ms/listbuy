@@ -25,7 +25,7 @@ export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
 
   return (
     <Modal>
-      <H2 label="Deseja mesma apagar essa lista?" color="black" />
+      <H2 label="Deseja mesmo deletar esta lista?" color="black" />
       <span className="text-neutral-700">{props.listName}</span>
       <div className="flex justify-between w-full gap-2 mt-4">
         <Button typeBtn="button" color="danger" label="Cancelar" onClick={handleCancel} />

@@ -115,14 +115,23 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         setCloseModalItem(true)
       }
 
-      toast.update(load, {
-        render: 'Produto adicionado ao carrinho',
-        type: 'success',
-        isLoading: false,
-        autoClose: 2000,
-      })
+      if (data.inTheCart === 1) {
+        toast.update(load, {
+          render: 'Adicionado ao carrinho',
+          type: 'success',
+          isLoading: false,
+          autoClose: 2000,
+        })
+      } else {
+        toast.update(load, {
+          render: 'Removido do carrinho',
+          type: 'success',
+          isLoading: false,
+          autoClose: 2000,
+        })
+      }
     } catch (err) {
-      toast.update(load, { render: 'Erro ao adicionar', type: 'error', isLoading: false, autoClose: 2000 })
+      toast.update(load, { render: 'Erro na ação', type: 'error', isLoading: false, autoClose: 2000 })
       console.log(err)
     }
   }, [])
@@ -141,13 +150,13 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
       }
 
       toast.update(load, {
-        render: 'Produto apagado com sucesso',
+        render: 'Deletado com sucesso',
         type: 'success',
         isLoading: false,
         autoClose: 2000,
       })
     } catch (err) {
-      toast.update(load, { render: 'Erro ao apagar', type: 'error', isLoading: false, autoClose: 2000 })
+      toast.update(load, { render: 'Erro ao Deletado', type: 'error', isLoading: false, autoClose: 2000 })
       console.log(err)
     }
   }, [])

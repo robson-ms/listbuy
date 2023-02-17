@@ -1,17 +1,17 @@
-import { useRouter } from 'next/router'
-import { useLists } from '@/hooks/lists'
-import { useEffect, useState } from 'react'
-import { GetServerSideProps } from 'next'
+import Head from 'next/head'
 import ModalEditeOrCreate from './list-modal-edite-or-create'
 import Table from './table'
 import Layout from '@/components/layout'
 import Header from './header'
+import { useRouter } from 'next/router'
+import { useLists } from '@/hooks/lists'
+import { useEffect, useState } from 'react'
+import { GetServerSideProps } from 'next'
 import { useItem } from '@/hooks/items'
 import { Loading } from '@/components/loading'
 import { ItemTypes } from '@/hooks/items/types'
 import { maskCurrency } from '@/utils/mask'
 import { ButtonToCart } from '@/components/button-to-cart'
-import Head from 'next/head'
 
 export default function List(props: any) {
   const { featchListItems, listItems, loading, lengthItemsFromCart } = useLists()
@@ -65,7 +65,7 @@ export default function List(props: any) {
         amountTotalList={listItems.Item?.length}
         valueTotalList={valueTotalList}
         renderComponent="list"
-        title={listItems.title}
+        title={`Lista: ${listItems.title}`}
       />
 
       <div className="w-full h-full max-w-screen-md bg-default overflow-auto drop-shadow-lg mt-1">
@@ -89,6 +89,7 @@ export default function List(props: any) {
           type={typeEditeOrCreate}
         />
       )}
+
       <ButtonToCart lengthItems={lengthItemsFromCart} onClick={() => router.push(`/list/${props.LIST_ID}/cart`)} />
     </Layout>
   )

@@ -71,7 +71,7 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
     <Modal>
       <div>
         <div className="flex w-full justify-center items-center">
-          <H2 label="Add New Items" color="black" />
+          {props.type === 'create' ? <H2 label="Novo item" color="black" /> : <H2 label="Editar" color="black" />}
         </div>
 
         <Input type="text" placeholder="Titulo" onChange={e => setTitle(e.currentTarget.value)} value={title} />

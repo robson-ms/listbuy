@@ -115,10 +115,10 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         refreshData()
       }
 
-      toast.update(load, { render: 'Lista apagada com sucesso', type: 'success', isLoading: false, autoClose: 1000 })
+      toast.update(load, { render: 'Delatada com sucesso', type: 'success', isLoading: false, autoClose: 1000 })
     } catch (err) {
       console.log(err)
-      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 1000 })
+      toast.update(load, { render: 'Erro ao deletar', type: 'error', isLoading: false, autoClose: 1000 })
       setError(err)
     }
   }, [])
