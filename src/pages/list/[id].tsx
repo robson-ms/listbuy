@@ -64,7 +64,7 @@ export default function List(props: any) {
         amountTotalList={listItems.Item?.length}
         valueTotalList={valueTotalList}
         renderComponent="list"
-        listId={listItems.id}
+        listId={props.LIST_ID}
         title={`Lista: ${listItems.title}`}
       />
 
