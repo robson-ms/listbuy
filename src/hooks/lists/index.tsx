@@ -36,7 +36,7 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
 
   const router = useRouter()
 
-  const refreshData = () => {
+  async function refreshData() {
     router.replace('/')
   }
 
@@ -90,13 +90,13 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
         isDone: 0,
       })
       if (res.status === 200) {
+        await refreshData()
         setCloseModal(true)
-        refreshData()
       }
 
-      toast.update(load, { render: 'Cadastro com sucesso', type: 'success', isLoading: false, autoClose: 3000 })
+      toast.update(load, { render: 'Cadastro com sucesso', type: 'success', isLoading: false, autoClose: 1000 })
     } catch (err) {
-      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 3000 })
+      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 1000 })
       console.log(err)
     }
   }, [])
@@ -112,14 +112,14 @@ const ListsProvider = ({ children }: ListProviderTypes) => {
       })
 
       if (res.status === 200) {
+        await refreshData()
         setCloseModal(true)
-        refreshData()
       }
 
-      toast.update(load, { render: 'Lista apagada com sucesso', type: 'success', isLoading: false, autoClose: 3000 })
+      toast.update(load, { render: 'Lista apagada com sucesso', type: 'success', isLoading: false, autoClose: 1000 })
     } catch (err) {
       console.log(err)
-      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 3000 })
+      toast.update(load, { render: 'Erro ao cadastrar', type: 'error', isLoading: false, autoClose: 1000 })
       setError(err)
     }
   }, [])

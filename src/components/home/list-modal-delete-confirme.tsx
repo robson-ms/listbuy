@@ -16,7 +16,7 @@ export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
 
   useEffect(() => {
     if (closeModal) {
-      props.setIsVisible(!props.isVisible)
+      props.setIsVisible(false)
     }
   }, [closeModal])
 

@@ -29,7 +29,7 @@ export default function ListComponent({ list, handleDelete }: TypesList) {
           <div className="-mb-5">
             <H2 color="black" label={list.title} />
           </div>
-          <Span color="black" label={`Criado: ${createdAt}`} />
+          <Span color="black" label={`Lista criada em: ${createdAt}`} />
         </div>
 
         <div className="flex gap-4">
