@@ -1,5 +1,5 @@
 import { HeaderComponent } from '@/components/header'
-import { H1 } from '@/components/text'
+import { H1, H2 } from '@/components/text'
 import { ArrowLeft, Plus } from 'phosphor-react'
 import { useLists } from '@/hooks/lists'
 import { LoadingComponent } from '@/components/loading/component/inext'
@@ -35,7 +35,7 @@ export default function Header(props: HeaderTypes) {
             <LoadingComponent />
           ) : (
             <>
-              <H1 label={props.title} color="white" />
+              <span className="text-white mb-1 font-bold">{props.title}</span>
               <div className="font-normal text-sm text-white">
                 <span> {`${props?.amountTotalList} Produtos | Total R$${props?.valueTotalList}`} </span>
               </div>
