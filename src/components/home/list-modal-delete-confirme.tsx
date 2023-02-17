@@ -16,11 +16,7 @@ export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
   async function handleDelete() {
     await deleteLists(props.listId)
 
-    setTimeout(() => {
-      if (statusText === 'OK') {
-        props.setIsVisible(false)
-      }
-    }, 2000)
+    props.setIsVisible(false)
   }
 
   function handleCancel() {

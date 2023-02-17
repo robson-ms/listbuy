@@ -20,11 +20,7 @@ export default function ListModal(props: ModalTypes) {
   async function handleCreate() {
     await postLists(valueInput, String(userId))
 
-    setTimeout(() => {
-      if (statusText === 'OK') {
-        props.setIsVisibleModalCreate(false)
-      }
-    }, 2000)
+    props.setIsVisibleModalCreate(false)
   }
 
   function handleCancel() {
