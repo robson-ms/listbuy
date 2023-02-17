@@ -20,7 +20,7 @@ export default function ListModalDeleteConfirme(props: ModalDeleteTypes) {
       if (statusText === 'OK') {
         props.setIsVisible(false)
       }
-    }, 1000)
+    }, 2000)
   }
 
   function handleCancel() {

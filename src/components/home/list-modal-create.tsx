@@ -24,7 +24,7 @@ export default function ListModal(props: ModalTypes) {
       if (statusText === 'OK') {
         props.setIsVisibleModalCreate(false)
       }
-    }, 1000)
+    }, 2000)
   }
 
   function handleCancel() {
