@@ -5,6 +5,7 @@ import { useLists } from '@/hooks/lists'
 import { LoadingComponent } from '@/components/loading/component/inext'
 import { ButtonToCart } from '@/components/button-to-cart'
 import { useRouter } from 'next/router'
+import { valueToCurrency } from '@/utils/mask'
 
 type HeaderTypes = {
   title: string
@@ -21,8 +22,6 @@ export default function Header(props: HeaderTypes) {
 
   const router = useRouter()
 
-  console.log(props.listId)
-
   return (
     <HeaderComponent>
       <div className="flex w-full items-center">
@@ -37,7 +36,7 @@ export default function Header(props: HeaderTypes) {
             <>
               <span className="text-white mb-1 font-bold">{props.title}</span>
               <div className="font-normal text-sm text-white">
-                <span> {`${props?.amountTotalList} Produtos | Total R$${props?.valueTotalList}`} </span>
+                <span> {`${props?.amountTotalList} Produtos | Total ${valueToCurrency(props?.valueTotalList)}`} </span>
               </div>
             </>
           )}

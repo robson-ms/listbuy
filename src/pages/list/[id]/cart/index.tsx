@@ -36,14 +36,12 @@ export default function List(props: any) {
     itemRemoveOrAddToCart(data)
   }
 
-  const valueTotalList = maskCurrency(
-    String(
-      // @ts-ignore
-      listItems?.Item?.reduce((accumulator: any, object: ItemTypes) => {
-        return accumulator + object.valueTotal
-      }, 0)
-    )
-  )
+  const valueTotalList =
+    listItems?.Item?.length === 0
+      ? 0
+      : listItems?.Item?.map(datum => datum.valueTotal)
+          .reduce((a, b) => a + b)
+          .toFixed(2)
 
   return (
     <Layout>
@@ -57,7 +55,7 @@ export default function List(props: any) {
         title="Produtos no carrinho"
         handleBack={handleBack}
         amountTotalList={listItems.Item?.length}
-        valueTotalList={valueTotalList}
+        valueTotalList={String(valueTotalList)}
         renderComponent="inTheCart"
       />
 

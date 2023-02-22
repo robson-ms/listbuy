@@ -95,7 +95,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         render: 'Produto atualizado com sucesso',
         type: 'success',
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 1000,
       })
     } catch (err) {
       toast.update(load, { render: 'Erro ao atualizar', type: 'error', isLoading: false, autoClose: 2000 })
@@ -120,18 +120,18 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
           render: 'Adicionado ao carrinho',
           type: 'success',
           isLoading: false,
-          autoClose: 2000,
+          autoClose: 1000,
         })
       } else {
         toast.update(load, {
           render: 'Removido do carrinho',
           type: 'success',
           isLoading: false,
-          autoClose: 2000,
+          autoClose: 1000,
         })
       }
     } catch (err) {
-      toast.update(load, { render: 'Erro na ação', type: 'error', isLoading: false, autoClose: 2000 })
+      toast.update(load, { render: 'Erro na ação', type: 'error', isLoading: false, autoClose: 1000 })
       console.log(err)
     }
   }, [])
@@ -153,7 +153,7 @@ const ItemProvider = ({ children }: ItemProviderTypes) => {
         render: 'Deletado com sucesso',
         type: 'success',
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 1000,
       })
     } catch (err) {
       toast.update(load, { render: 'Erro ao Deletado', type: 'error', isLoading: false, autoClose: 2000 })

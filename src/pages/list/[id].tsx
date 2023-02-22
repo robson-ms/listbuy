@@ -41,14 +41,12 @@ export default function List(props: any) {
     setTypeEditeOrCreate('create')
   }
 
-  const valueTotalList = maskCurrency(
-    String(
-      // @ts-ignore
-      listItems?.Item?.reduce((amount: any, object: ItemTypes) => {
-        return amount + object.valueTotal
-      }, 0)
-    )
-  )
+  const valueTotalList =
+    listItems?.Item?.length === 0
+      ? 0
+      : listItems?.Item?.map(datum => datum.valueTotal)
+          .reduce((a, b) => a + b)
+          .toFixed(2)
 
   return (
     <Layout>
@@ -62,7 +60,7 @@ export default function List(props: any) {
         handleCreateNewItem={handleCreateNewItem}
         handleBack={handleBack}
         amountTotalList={listItems.Item?.length}
-        valueTotalList={valueTotalList}
+        valueTotalList={String(valueTotalList)}
         renderComponent="list"
         listId={props.LIST_ID}
         title={`Lista: ${listItems.title}`}

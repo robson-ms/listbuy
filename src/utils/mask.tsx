@@ -11,8 +11,18 @@ export function unMaskCurrency(value: string) {
   return value
 }
 
+export function valueToCurrency(data: string) {
+  const value = Number(data)
+  return value.toLocaleString('pt-br', {
+    minimumFractionDigits: 2,
+    style: 'currency',
+    currency: 'BRL',
+  })
+}
+
 export function unMaskCurrencySubmit(value: string) {
   value = value.replace(',', '')
   value = value.replace('.', '')
+  value = (Number(value) / 100).toFixed(2)
   return value
 }

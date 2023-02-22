@@ -16,6 +16,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             where: {
               inTheCart: Number(inTheCart),
             },
+            orderBy: {
+              title: 'asc',
+            },
           },
         },
       })

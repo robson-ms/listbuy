@@ -88,7 +88,7 @@ export default function ModalEditeOrCreate(props: AddItemModalTypes) {
               type="text"
               pattern="[0-9]*"
               inputMode="numeric"
-              onChange={e => setPrice(maskCurrency(e.currentTarget.value))}
+              onChange={e => setPrice(maskCurrency(String(e.currentTarget.value)))}
               value={price}
             />
           </div>
